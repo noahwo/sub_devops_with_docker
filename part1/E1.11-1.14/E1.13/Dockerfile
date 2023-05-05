@@ -1,0 +1,22 @@
+# To start this docker, run `docker build . -t e1.13 &&  docker run -it --rm -p 8080:8080 e1.13`
+
+FROM --platform=linux/amd64 ubuntu:20.04
+
+EXPOSE 8080
+
+RUN apt update && apt install -y wget
+
+COPY . .
+
+RUN wget https://go.dev/dl/go1.20.3.linux-amd64.tar.gz
+
+RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.20.3.linux-amd64.tar.gz
+
+ENV PATH="/usr/local/go/bin:${PATH}"
+
+ENV PORT=8080
+
+RUN go build .
+
+CMD ./server
+
